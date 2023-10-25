@@ -35,4 +35,12 @@ jobs:
         run: |
           echo "TODAY=$(date +%y-%m-%d)" >> $GITHUB_ENV
           scrapy crawl shopee -o $GITHUB_WORKSPACE/data/$TODAY.json -t json
+
+      - name: Commit and push data
+        run: |
+          git config --global user.email "anhtuan.ltqb@gmail.com"
+          git config --global user.name "TTAT91A"
+          git add data/
+          git commit -m "Add data file for $TODAY"
+          git push
           
