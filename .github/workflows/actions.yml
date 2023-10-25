@@ -34,5 +34,5 @@ jobs:
       - name: execute py script # run main.py
         run: |
           echo "TODAY=$(date +%y-%m-%d)" >> $GITHUB_ENV
-          scrapy crawl shopee -o data/$TODAY.json -t json
+          scrapy crawl shopee -o $GITHUB_WORKSPACE/data/$TODAY.json -t json
           
