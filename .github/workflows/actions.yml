@@ -41,6 +41,14 @@ jobs:
           git config --global user.name "TTAT91A"
           git add data/
           git commit -m "Add data file for $TODAY"
-          git push origin main
+          # git push origin main
+          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main 
+  
 
           
