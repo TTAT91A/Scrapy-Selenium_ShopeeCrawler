@@ -36,6 +36,7 @@ jobs:
 
       - name: Commit and push data
         run: |
+          ls
           git config --global user.email "anhtuan.ltqb@gmail.com"
           git config --global user.name "TTAT91A"
           git add data/
