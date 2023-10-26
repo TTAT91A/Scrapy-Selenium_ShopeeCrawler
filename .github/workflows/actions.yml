@@ -33,6 +33,7 @@ jobs:
           cd ShopeeCrawler/spiders
           echo "TODAY=$(date +%y-%m-%d)" >> $GITHUB_ENV
           scrapy crawl shopee -o $GITHUB_WORKSPACE/data/$TODAY.json -t json
+          dir
 
       - name: Commit and push data
         run: |
