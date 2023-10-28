@@ -9,7 +9,7 @@ class ShopeeSpider(scrapy.Spider):
     name = "shopee"
     def __init__(self):
         self.starting_time = datetime.datetime.now()
-        self.start_urls = ['https://shopee.vn/coolmate.vn', 'https://shopee.vn/rough.vn']
+        self.start_urls = ['https://shopee.vn/coolmate.vn', 'https://shopee.vn/rough.vn', 'https://shopee.vn/owen.fashion', 'https://shopee.vn/khatoco.fashion']
         # self.start_urls = ['https://shopee.vn/rough.vn']
     
     def start_requests(self):
