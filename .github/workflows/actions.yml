@@ -2,7 +2,7 @@ name: run scrapy shopee
 
 on:
   schedule:
-    - cron: '0 0 * * *' # At 0h everyday
+    - cron: '0 1 * * *' # At 0h everyday
 
 jobs:
   build:
