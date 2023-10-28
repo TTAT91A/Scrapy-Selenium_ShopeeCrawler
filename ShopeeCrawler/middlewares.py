@@ -19,15 +19,6 @@ from scrapy.http import HtmlResponse
 from selenium.common.exceptions import TimeoutException
 import json
 
-# options = Options()
-# options.add_argument("--headless")
-# options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36")
-# options.add_argument("window-size=1920,1080")
-# prefs = {"profile.managed_default_content_settings.images": 2}
-# options.add_experimental_option("prefs", prefs)
-
-# chrome_browser_path = ChromeDriverManager().install()
-# chrome_service = Service(executable_path=chrome_browser_path)
 
 class ShopeecrawlerSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
@@ -80,19 +71,19 @@ class ShopeecrawlerDownloaderMiddleware:
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
     def __init__(self):
+        # with open(Path(__file__).with_name('proxy_list.txt'), "r") as f:
+        #     self.proxies = f.read().split("\n")
         self.options = Options()
         self.options.add_argument("--headless")
         self.options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36")
         self.options.add_argument("window-size=1920,1080")
         prefs = {"profile.managed_default_content_settings.images": 2}
         self.options.add_experimental_option("prefs", prefs)
-        self.chrome_browser_path = ChromeDriverManager().install()
-        self.chrome_service = None
         self.browser = None
+        
     
     def spider_opened(self, spider):
-        self.chrome_service = Service(executable_path=self.chrome_browser_path)
-        self.browser = webdriver.Chrome(service=self.chrome_service, options=self.options)
+        self.browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.options)
         
         # Load the saved cookies
         with open("shopee_cookies.json", "r") as file:

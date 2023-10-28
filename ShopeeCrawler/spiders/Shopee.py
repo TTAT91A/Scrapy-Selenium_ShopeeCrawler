@@ -18,15 +18,19 @@ class ShopeeSpider(scrapy.Spider):
             index = 0
             while not self.stop_loop:
                 link = url + '?page='+str(index)+'&sortBy=pop'
-                yield scrapy.Request(url=link, callback=self.parse_link_page)
+                request = Request(url=link, callback=self.parse_link_page)
+                request.meta["proxy"] = "http://165.227.186.129:80"
+                yield request
                 index += 1
     
     def parse_link_page(self, response):#get link of each product
         products = response.css("div.shop-search-result-view__item.col-xs-2-4")
         if len(products) != 0:
-            for product in products[:3]:
+            for product in products:
                 product_link = "https://shopee.vn/" + product.css("a::attr(href)").get()
-                yield scrapy.Request(url=product_link,callback=self.parse_product)
+                request = Request(url=product_link,callback=self.parse_product)
+                request.meta["proxy"] = "http://165.227.186.129:80"
+                yield request
         else:
             self.stop_loop = True
             
