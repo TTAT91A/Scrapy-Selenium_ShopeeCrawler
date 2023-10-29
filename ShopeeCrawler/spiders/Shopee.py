@@ -4,13 +4,19 @@ from scrapy.http import Request, Response
 import datetime
 from scrapy.utils.response import open_in_browser
 from datetime import date
-
+from pathlib import Path
+import random
+def get_random_proxy():
+    p = Path(__file__).with_name('proxy_list.txt')
+    with p.open('r') as f:
+        proxies = f.read().split("\n")
+    random_proxy = random.choice(proxies)
+    return random_proxy
 class ShopeeSpider(scrapy.Spider):
     name = "shopee"
     def __init__(self):
         self.starting_time = datetime.datetime.now()
-        self.start_urls = ['https://shopee.vn/coolmate.vn', 'https://shopee.vn/rough.vn', 'https://shopee.vn/owen.fashion', 'https://shopee.vn/khatoco.fashion']
-        # self.start_urls = ['https://shopee.vn/rough.vn']
+        self.start_urls = ['https://shopee.vn/coolmate.vn', 'https://shopee.vn/rough.vn']
     
     def start_requests(self):
         for url in self.start_urls:
@@ -19,7 +25,7 @@ class ShopeeSpider(scrapy.Spider):
             while not self.stop_loop:
                 link = url + '?page='+str(index)+'&sortBy=pop'
                 request = Request(url=link, callback=self.parse_link_page)
-                request.meta["proxy"] = "http://165.227.186.129:80"
+                request.meta["proxy"] = "http://" + get_random_proxy()
                 yield request
                 index += 1
     
@@ -29,7 +35,7 @@ class ShopeeSpider(scrapy.Spider):
             for product in products:
                 product_link = "https://shopee.vn/" + product.css("a::attr(href)").get()
                 request = Request(url=product_link,callback=self.parse_product)
-                request.meta["proxy"] = "http://165.227.186.129:80"
+                request.meta["proxy"] = "http://" + get_random_proxy()
                 yield request
         else:
             self.stop_loop = True
@@ -37,8 +43,14 @@ class ShopeeSpider(scrapy.Spider):
     def parse_product(self, response):
         shop = response.css("div.VlDReK::text").get()
         product_name = response.css("div._44qnta span::text").get()
-        rating_point = float(response.css("div._1k47d8._046PXf::text").get())
-        number_of_reviews = response.css("div._1k47d8::text")[-1].get()
+        review = response.css("div._1k47d8::text")
+        if len(review) == 0:
+            rating_point = None
+            number_of_reviews = 0
+        else:
+            rating_point = float(review[0].get())
+            number_of_reviews = review[-1].get()
+
         quantity_sold = response.css("div.e9sAa2::text").get()
         current_price = response.css("div.pqTWkA::text").get()
         original_price = response.css("div.Y3DvsN::text").get() #maybe null
@@ -61,7 +73,8 @@ class ShopeeSpider(scrapy.Spider):
 
         #get category of product
         category_name = product_details[0].css("label::text").get()
-        category_value = product_details[0].css("a::text")[-1].get()
+        # category_value = product_details[0].css("a::text")[-1].get()
+        category_value = [x.get() for x in product_details[0].css("a::text")]
         #get brand of product
         brand_name = product_details[1].css("label::text").get()
         brand_value = product_details[1].css("a::text").get()
