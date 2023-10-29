@@ -71,8 +71,6 @@ class ShopeecrawlerDownloaderMiddleware:
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
     def __init__(self):
-        # with open(Path(__file__).with_name('proxy_list.txt'), "r") as f:
-        #     self.proxies = f.read().split("\n")
         self.options = Options()
         self.options.add_argument("--headless")
         self.options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.9999.999 Safari/537.36")
@@ -116,44 +114,6 @@ class ShopeecrawlerDownloaderMiddleware:
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
 ###################### ##########################################################
-        # browser = webdriver.Chrome(service=chrome_service, options=options)
-        # # browser.get(request.url)
-
-        # import json
-        # # Load the saved cookies
-        # with open("shopee_cookies.json", "r") as file:
-        #     cookies = json.loads(file.read())
-
-        # # Visit Shopee.vn with the saved cookies
-        # browser.get(request.url)
-
-        # # Add the saved cookies to the current session
-        # for cookie in cookies:
-        #     browser.add_cookie(cookie)
-        
-        # # Refresh the page to apply the cookies
-        # browser.refresh()
-        # if request.url.split("?")[0] in spider.start_urls:
-        #     try:
-        #         WebDriverWait(browser,5).until(EC.presence_of_element_located((By.CSS_SELECTOR,"div.shop-search-result-view")))
-        #         print("HomePage is ready")
-        #     except TimeoutException:
-        #         print("Loading took too much time!")
-        # else:
-        #     try:
-        #         #product page
-        #         WebDriverWait(browser,5).until(EC.presence_of_element_located((By.CSS_SELECTOR,"div.product-detail.page-product__detail")))
-        #         print("Product's Page is ready")
-        #     except TimeoutException:
-        #         print("Loading took too much time!")
-            
-        # browser.get_screenshot_as_file("screenshot.png")
-
-        # body = browser.page_source
-        # abc = browser.current_url
-        # browser.close()
-        # return HtmlResponse(abc,body = body, encoding = 'utf8', request = request)
-###########################################################################################
         if self.browser is not None:
             self.browser.get(request.url)
             if request.url.split("?")[0] in spider.start_urls:
